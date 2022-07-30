@@ -1,5 +1,7 @@
 package model
 
+import "time"
+
 type Exam struct {
 	Id         string `json:"exam_id"`
 	PatientId  string `json:"patient_id"`
@@ -9,4 +11,10 @@ type Exam struct {
 	UpdatedAt  string `json:"updated_at"`
 	FinishedAt string `json:"finished_at"`
 	IsRevoked  string `json:"is_revoked"`
+}
+
+type ObjectStorageArchive struct {
+	Key          string
+	LastModified time.Time
+	Content      []byte
 }

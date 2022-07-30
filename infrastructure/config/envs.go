@@ -12,6 +12,7 @@ type environment struct {
 	S3ProcessedKey             string `env:"ZMED_S3_PROCESSED_KEY"`
 	S3StuckKey                 string `env:"ZMED_S3_STUCK_KEY"`
 	S3DeniedKey                string `env:"ZMED_S3_DENIED_KEY"`
+	S3DeletedKey               string `env:"ZMED_S3_DELETED_KEY"`
 }
 
 var ENV environment
