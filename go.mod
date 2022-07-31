@@ -3,6 +3,7 @@ module zmed_exam_manager
 go 1.18
 
 require (
+	cloud.google.com/go v0.103.0
 	github.com/Netflix/go-env v0.0.0-20220526054621-78278af1949d
 	github.com/aws/aws-sdk-go-v2 v1.16.7
 	github.com/aws/aws-sdk-go-v2/config v1.15.14
@@ -14,7 +15,6 @@ require (
 )
 
 require (
-	cloud.google.com/go v0.103.0 // indirect
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.4.3 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.12.9 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.12.8 // indirect
