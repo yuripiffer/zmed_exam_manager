@@ -25,10 +25,10 @@ func NewRepository(awsConfig aws.Config, table string) *repository {
 	}
 }
 
-func (r *repository) Persist(ctx context.Context, data *model.Exam) app_errors.AppError {
+func (r *repository) Persist(ctx context.Context, data *model.Exam) (*model.Exam, app_errors.AppError) {
 	dataMap, err := attributevalue.MarshalMap(data)
 	if err != nil {
-		return app_errors.NewInternalServerError("Error in persist Dynamodb", err)
+		return nil, app_errors.NewInternalServerError("Error in persist Dynamodb", err)
 	}
 
 	params := &dynamodb.PutItemInput{
@@ -36,11 +36,15 @@ func (r *repository) Persist(ctx context.Context, data *model.Exam) app_errors.A
 		Item:      dataMap,
 	}
 
-	_, err = r.client.PutItem(ctx, params)
+	result, err := r.client.PutItem(ctx, params)
 	if err != nil {
-		return app_errors.NewInternalServerError("Error in persist Dynamodb", err)
+		return nil, app_errors.NewInternalServerError("Error in persist Dynamodb", err)
 	}
-	return nil
+
+	exam := model.Exam{}
+	err = attributevalue.UnmarshalMap(result.Attributes, &exam)
+
+	return &exam, nil
 }
 
 func (r *repository) FindById(id string) (*model.Exam, app_errors.AppError) {
@@ -59,4 +63,36 @@ func (r *repository) FindById(id string) (*model.Exam, app_errors.AppError) {
 		return nil, app_errors.NewInternalServerError("Error in Dynamodb unmarshal", err)
 	}
 	return exam, nil
+}
+
+func (r *repository) FindExamsByPatientId(ctx context.Context, patientId string) ([]*model.Exam, app_errors.AppError) {
+	keyConditions := map[string]types.Condition{
+		"patient_id": {
+			ComparisonOperator: "EQ",
+			AttributeValueList: []types.AttributeValue{
+				&types.AttributeValueMemberS{Value: patientId},
+			},
+		},
+	}
+
+	return r.runQuery(ctx, keyConditions)
+}
+
+func (r *repository) runQuery(ctx context.Context, keyConditions map[string]types.Condition) ([]*model.Exam, app_errors.AppError) {
+	var queryInput = dynamodb.QueryInput{
+		TableName:     aws.String(r.table),
+		KeyConditions: keyConditions,
+	}
+
+	response, err := r.client.Query(ctx, &queryInput)
+	if err != nil {
+		return nil, app_errors.NewInternalServerError("Error in Dynamodb", err)
+	}
+	var queryResult []*model.Exam
+
+	err = attributevalue.UnmarshalListOfMaps(response.Items, &queryResult)
+	if err != nil {
+		return nil, app_errors.NewInternalServerError("Error in Dynamodb", err)
+	}
+	return queryResult, nil
 }

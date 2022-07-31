@@ -1,11 +1,33 @@
 package interface_input
 
-import "zmed_exam_manager/app_errors"
+import (
+	"context"
+	"zmed_exam_manager/app_errors"
+	"zmed_exam_manager/model"
+)
 
 type ExamsUseCase interface {
-	RegisterExam() app_errors.AppError
-	FindExams() app_errors.AppError
-	StartExam() app_errors.AppError
+	RegisterExam(ctx context.Context, dto RegisterRequestDTO) (*model.Exam, app_errors.AppError)
+	FindExams(ctx context.Context, dto FindRequestDTO) ([]*model.Exam, app_errors.AppError)
+	StartExam(ctx context.Context, dto StartRequestDTO) (string, app_errors.AppError)
 	RevokeExam() app_errors.AppError
 	CommunicatePatient() app_errors.AppError
+}
+
+type RegisterRequestDTO struct {
+	Document string `json:"document"`
+	ExamType *int   `json:"exam_type"`
+}
+
+type FindRequestDTO struct {
+	Document string `json:"document"`
+}
+
+type StartRequestDTO struct {
+	Document *string `json:"document"`
+	ExamId   *string `json:"exam_id"`
+	ExamType *int    `json:"exam_type"`
+}
+
+type CommunicateRequestDTO struct {
 }

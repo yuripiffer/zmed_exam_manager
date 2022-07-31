@@ -10,7 +10,7 @@ type Exam struct {
 	CreatedAt  string `json:"created_at"`
 	UpdatedAt  string `json:"updated_at"`
 	FinishedAt string `json:"finished_at"`
-	IsRevoked  string `json:"is_revoked"`
+	IsRevoked  bool   `json:"is_revoked"`
 }
 
 type ObjectStorageArchive struct {

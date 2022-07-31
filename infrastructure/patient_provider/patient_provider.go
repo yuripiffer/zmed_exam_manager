@@ -48,7 +48,6 @@ func (p *provider) GetPatient(document string) (*model.Patient, app_errors.AppEr
 	if err != nil {
 		return nil, app_errors.NewInternalServerError("Get Patient Request Error", err)
 	}
-	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
 		return nil, app_errors.NewInternalServerError("Get Patient Request Error", err)
