@@ -11,41 +11,41 @@ import (
 	"zmed_exam_manager/model"
 )
 
-type provider struct {
+type repository struct {
 	client *dynamodb.Client
 	table  string
 }
 
-func NewProvider(awsConfig aws.Config, table string) *provider {
+func NewRepository(awsConfig aws.Config, table string) *repository {
 	client := dynamodb.NewFromConfig(awsConfig)
 	fmt.Println(client)
-	return &provider{
+	return &repository{
 		client: client,
 		table:  table,
 	}
 }
 
-func (p *provider) Persist(ctx context.Context, data *model.Exam) app_errors.AppError {
+func (r *repository) Persist(ctx context.Context, data *model.Exam) app_errors.AppError {
 	dataMap, err := attributevalue.MarshalMap(data)
 	if err != nil {
 		return app_errors.NewInternalServerError("Error in persist Dynamodb", err)
 	}
 
 	params := &dynamodb.PutItemInput{
-		TableName: aws.String(p.table),
+		TableName: aws.String(r.table),
 		Item:      dataMap,
 	}
 
-	_, err = p.client.PutItem(ctx, params)
+	_, err = r.client.PutItem(ctx, params)
 	if err != nil {
 		return app_errors.NewInternalServerError("Error in persist Dynamodb", err)
 	}
 	return nil
 }
 
-func (p *provider) FindById(id string) (*model.Exam, app_errors.AppError) {
-	out, err := p.client.GetItem(context.TODO(), &dynamodb.GetItemInput{
-		TableName: aws.String(p.table),
+func (r *repository) FindById(id string) (*model.Exam, app_errors.AppError) {
+	out, err := r.client.GetItem(context.TODO(), &dynamodb.GetItemInput{
+		TableName: aws.String(r.table),
 		Key: map[string]types.AttributeValue{
 			"id": &types.AttributeValueMemberS{Value: id},
 		},

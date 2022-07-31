@@ -11,7 +11,10 @@ func main() {
 	config.PopulateEnv()
 
 	awsConfig := config.InitAws()
-	dynamoProvider := dynamo.NewProvider(awsConfig, config.ENV.DynamoExamManagerTableName)
-	s3Provider := s3.NewProvider(awsConfig)
-	fmt.Println(dynamoProvider, s3Provider)
+	dynamoRepository := dynamo.NewRepository(awsConfig, config.ENV.DynamoExamManagerTableName)
+	s3Provider := s3.NewRepository(awsConfig)
+	fmt.Println(dynamoRepository, s3Provider)
+
+	//r := mux.NewRouter()
+	//web.ConfigureExamsRoutes()
 }

@@ -14,7 +14,7 @@ import (
 	"zmed_exam_manager/infrastructure/config"
 )
 
-type provider struct {
+type repository struct {
 	client       *s3.Client
 	bucket       string
 	completedKey string
@@ -24,8 +24,8 @@ type provider struct {
 	deletedKey   string
 }
 
-func NewProvider(awsConfig aws.Config) *provider {
-	return &provider{
+func NewRepository(awsConfig aws.Config) *repository {
+	return &repository{
 		client:       s3.NewFromConfig(awsConfig),
 		bucket:       config.ENV.S3Bucket,
 		completedKey: config.ENV.S3CompletedKey,
@@ -36,12 +36,12 @@ func NewProvider(awsConfig aws.Config) *provider {
 	}
 }
 
-func (p *provider) PullS3CompletedExams(ctx context.Context) ([]types.Object, app_errors.AppError) {
+func (r *repository) PullS3CompletedExams(ctx context.Context) ([]types.Object, app_errors.AppError) {
 	params := &s3.ListObjectsInput{
-		Bucket: aws.String(p.bucket),
-		Prefix: aws.String(p.completedKey),
+		Bucket: aws.String(r.bucket),
+		Prefix: aws.String(r.completedKey),
 	}
-	listObjectsOutput, err := p.client.ListObjects(ctx, params)
+	listObjectsOutput, err := r.client.ListObjects(ctx, params)
 	if err != nil {
 		return nil, app_errors.NewInternalServerError("Error in S3", err)
 	}
@@ -51,12 +51,12 @@ func (p *provider) PullS3CompletedExams(ctx context.Context) ([]types.Object, ap
 	return nil, nil
 }
 
-func (p *provider) MoveExamToProcessedFolder(ctx context.Context, objectKey *string) app_errors.AppError {
-	srcKey := "/" + p.bucket + "/" + *objectKey
-	destKey := fmt.Sprintf("/%s/%v_%v/%s", p.processedKey, time.Now().Year(), time.Now().Month(), path.Base(*objectKey))
-	_, err := p.client.CopyObject(ctx,
+func (r *repository) MoveExamToProcessedFolder(ctx context.Context, objectKey *string) app_errors.AppError {
+	srcKey := "/" + r.bucket + "/" + *objectKey
+	destKey := fmt.Sprintf("/%s/%v_%v/%s", r.processedKey, time.Now().Year(), time.Now().Month(), path.Base(*objectKey))
+	_, err := r.client.CopyObject(ctx,
 		&s3.CopyObjectInput{
-			Bucket:     aws.String(p.bucket),
+			Bucket:     aws.String(r.bucket),
 			CopySource: aws.String(srcKey),
 			Key:        aws.String(destKey),
 		},
@@ -67,12 +67,12 @@ func (p *provider) MoveExamToProcessedFolder(ctx context.Context, objectKey *str
 	return nil
 }
 
-func (p *provider) MoveExamToDeletedFolder(ctx context.Context, objectKey *string) app_errors.AppError {
-	srcKey := "/" + p.bucket + "/" + *objectKey
-	destKey := fmt.Sprintf("/%s/%v_%v/%s", p.deletedKey, time.Now().Year(), time.Now().Month(), path.Base(*objectKey))
-	_, err := p.client.CopyObject(ctx,
+func (r *repository) MoveExamToDeletedFolder(ctx context.Context, objectKey *string) app_errors.AppError {
+	srcKey := "/" + r.bucket + "/" + *objectKey
+	destKey := fmt.Sprintf("/%s/%v_%v/%s", r.deletedKey, time.Now().Year(), time.Now().Month(), path.Base(*objectKey))
+	_, err := r.client.CopyObject(ctx,
 		&s3.CopyObjectInput{
-			Bucket:     aws.String(p.bucket),
+			Bucket:     aws.String(r.bucket),
 			CopySource: aws.String(srcKey),
 			Key:        aws.String(destKey),
 		},
@@ -83,12 +83,12 @@ func (p *provider) MoveExamToDeletedFolder(ctx context.Context, objectKey *strin
 	return nil
 }
 
-func (p *provider) MoveExamToStuckFolder(ctx context.Context, objectKey *string) app_errors.AppError {
-	srcKey := "/" + p.bucket + "/" + *objectKey
-	destKey := fmt.Sprintf("/%s/%v_%v/%s", p.stuckKey, time.Now().Year(), time.Now().Month(), path.Base(*objectKey))
-	_, err := p.client.CopyObject(ctx,
+func (r *repository) MoveExamToStuckFolder(ctx context.Context, objectKey *string) app_errors.AppError {
+	srcKey := "/" + r.bucket + "/" + *objectKey
+	destKey := fmt.Sprintf("/%s/%v_%v/%s", r.stuckKey, time.Now().Year(), time.Now().Month(), path.Base(*objectKey))
+	_, err := r.client.CopyObject(ctx,
 		&s3.CopyObjectInput{
-			Bucket:     aws.String(p.bucket),
+			Bucket:     aws.String(r.bucket),
 			CopySource: aws.String(srcKey),
 			Key:        aws.String(destKey),
 		},
