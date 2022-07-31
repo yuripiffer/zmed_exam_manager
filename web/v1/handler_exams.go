@@ -26,6 +26,11 @@ func (h *ExamsV1Handler) NewExam(w http.ResponseWriter, r *http.Request) {
 			errors.New("document")))
 		return
 	}
+	if requestDTO.ExamType == nil {
+		app_response.ERROR(w, http.StatusBadRequest, app_errors.NewInputError("request field not found",
+			errors.New("exam_type")))
+		return
+	}
 	response, appError := h.UseCase.RegisterExam(ctx, requestDTO)
 	if appError != nil {
 		app_response.ERROR(w, http.StatusInternalServerError, appError) //TODO
