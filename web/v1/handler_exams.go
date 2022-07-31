@@ -14,7 +14,7 @@ func (h *ExamsV1Handler) NewExam(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *ExamsV1Handler) FindExamsByPatientId(w http.ResponseWriter, r *http.Request) {
-	_ = h.UseCase.GetExams()
+	_ = h.UseCase.FindExams()
 }
 
 func (h *ExamsV1Handler) StartExam(w http.ResponseWriter, r *http.Request) {
