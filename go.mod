@@ -3,6 +3,7 @@ module zmed_exam_manager
 go 1.18
 
 require (
+	cloud.google.com/go v0.103.0
 	github.com/Netflix/go-env v0.0.0-20220526054621-78278af1949d
 	github.com/aws/aws-sdk-go-v2 v1.16.7
 	github.com/aws/aws-sdk-go-v2/config v1.15.14
@@ -10,6 +11,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.11.20
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.15.9
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.27.1
+	github.com/gorilla/mux v1.8.0
 )
 
 require (

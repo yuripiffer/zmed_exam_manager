@@ -13,6 +13,9 @@ type environment struct {
 	S3StuckKey                 string `env:"ZMED_S3_STUCK_KEY"`
 	S3DeniedKey                string `env:"ZMED_S3_DENIED_KEY"`
 	S3DeletedKey               string `env:"ZMED_S3_DELETED_KEY"`
+	PatientManagerHost         string `env:"ZMED_PATIENT_MANAGER_HOST"`
+
+	PatientManagerGetPath string
 }
 
 var ENV environment
@@ -22,4 +25,5 @@ func PopulateEnv() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	ENV.PatientManagerGetPath = "document/find"
 }
