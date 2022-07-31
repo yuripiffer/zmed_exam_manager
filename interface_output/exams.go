@@ -13,6 +13,7 @@ type PatientProvider interface {
 type ExamsProvider interface {
 	Persist(ctx context.Context, data *model.Exam) (*model.Exam, app_errors.AppError)
 	FindById(id string) (*model.Exam, app_errors.AppError)
+	FindExamsByPatientId(ctx context.Context, patientId string) ([]*model.Exam, app_errors.AppError)
 }
 
 type RegisterResponseDTO struct {

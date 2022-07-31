@@ -35,7 +35,23 @@ func (h *ExamsV1Handler) NewExam(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *ExamsV1Handler) FindExamsByPatientId(w http.ResponseWriter, r *http.Request) {
-	_ = h.UseCase.FindExams()
+	ctx := r.Context()
+	requestDTO := interface_input.FindRequestDTO{}
+	_, appError := util.UnmarshalDto(w, r, &requestDTO)
+	if appError != nil {
+		return
+	}
+
+	if requestDTO.Document == "" {
+		app_response.ERROR(w, http.StatusBadRequest, app_errors.NewInputError("request field not found",
+			errors.New("document")))
+		return
+	}
+	response, appError := h.UseCase.FindExams(ctx, requestDTO)
+	if appError != nil {
+		app_response.ERROR(w, http.StatusInternalServerError, appError) //TODO
+	}
+	app_response.JSON(w, 200, response)
 }
 
 func (h *ExamsV1Handler) StartExam(w http.ResponseWriter, r *http.Request) {

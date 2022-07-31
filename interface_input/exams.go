@@ -8,7 +8,7 @@ import (
 
 type ExamsUseCase interface {
 	RegisterExam(ctx context.Context, dto RegisterRequestDTO) (*model.Exam, app_errors.AppError)
-	FindExams() app_errors.AppError
+	FindExams(ctx context.Context, dto FindRequestDTO) ([]*model.Exam, app_errors.AppError)
 	StartExam() app_errors.AppError
 	RevokeExam() app_errors.AppError
 	CommunicatePatient() app_errors.AppError

@@ -64,3 +64,35 @@ func (r *repository) FindById(id string) (*model.Exam, app_errors.AppError) {
 	}
 	return exam, nil
 }
+
+func (r *repository) FindExamsByPatientId(ctx context.Context, patientId string) ([]*model.Exam, app_errors.AppError) {
+	keyConditions := map[string]types.Condition{
+		"patient_id": {
+			ComparisonOperator: "EQ",
+			AttributeValueList: []types.AttributeValue{
+				&types.AttributeValueMemberS{Value: patientId},
+			},
+		},
+	}
+
+	return r.runQuery(ctx, keyConditions)
+}
+
+func (r *repository) runQuery(ctx context.Context, keyConditions map[string]types.Condition) ([]*model.Exam, app_errors.AppError) {
+	var queryInput = dynamodb.QueryInput{
+		TableName:     aws.String(r.table),
+		KeyConditions: keyConditions,
+	}
+
+	response, err := r.client.Query(ctx, &queryInput)
+	if err != nil {
+		return nil, app_errors.NewInternalServerError("Error in Dynamodb", err)
+	}
+	var queryResult []*model.Exam
+
+	err = attributevalue.UnmarshalListOfMaps(response.Items, &queryResult)
+	if err != nil {
+		return nil, app_errors.NewInternalServerError("Error in Dynamodb", err)
+	}
+	return queryResult, nil
+}
