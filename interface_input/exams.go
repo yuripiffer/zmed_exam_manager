@@ -9,7 +9,7 @@ import (
 type ExamsUseCase interface {
 	RegisterExam(ctx context.Context, dto RegisterRequestDTO) (*model.Exam, app_errors.AppError)
 	FindExams(ctx context.Context, dto FindRequestDTO) ([]*model.Exam, app_errors.AppError)
-	StartExam() app_errors.AppError
+	StartExam(ctx context.Context, dto StartRequestDTO) (string, app_errors.AppError)
 	RevokeExam() app_errors.AppError
 	CommunicatePatient() app_errors.AppError
 }
@@ -24,8 +24,9 @@ type FindRequestDTO struct {
 }
 
 type StartRequestDTO struct {
-	Document string `json:"document"`
-	ExamId   string `json:"exam_id"`
+	Document *string `json:"document"`
+	ExamId   *string `json:"exam_id"`
+	ExamType *int    `json:"exam_type"`
 }
 
 type CommunicateRequestDTO struct {

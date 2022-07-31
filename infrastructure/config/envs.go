@@ -14,6 +14,7 @@ type environment struct {
 	S3DeniedKey                string `env:"ZMED_S3_DENIED_KEY"`
 	S3DeletedKey               string `env:"ZMED_S3_DELETED_KEY"`
 	PatientManagerHost         string `env:"ZMED_PATIENT_MANAGER_HOST"`
+	JWTKey                     string `env:"ZMED_JWT_KEY"`
 
 	PatientManagerGetPath string
 }

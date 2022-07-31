@@ -60,25 +60,25 @@ func (h *ExamsV1Handler) FindExamsByPatientId(w http.ResponseWriter, r *http.Req
 }
 
 func (h *ExamsV1Handler) StartExam(w http.ResponseWriter, r *http.Request) {
-	_ = h.UseCase.StartExam()
+	ctx := r.Context()
+	requestDTO := interface_input.StartRequestDTO{}
+	_, appError := util.UnmarshalDto(w, r, &requestDTO)
+	if appError != nil {
+		return
+	}
+
+	if requestDTO.ExamId == nil || requestDTO.ExamType == nil || requestDTO.Document == nil {
+		app_response.ERROR(w, http.StatusBadRequest, app_errors.NewInputError("request field not found",
+			errors.New("needs exam_id, patient_id and exam_type")))
+	}
+
+	response, appError := h.UseCase.StartExam(ctx, requestDTO)
+	if appError != nil {
+		app_response.ERROR(w, http.StatusInternalServerError, appError) //TODO
+	}
+	app_response.JSON(w, 200, response)
 }
 
 func (h *ExamsV1Handler) FinishAndCommunicateExam(w http.ResponseWriter, r *http.Request) {
 	_ = h.UseCase.CommunicatePatient()
 }
-
-//func convertRequestDTO(r *http.Request, dto interface{}) (interface{}, app_errors.AppError) {
-//	body, err := ioutil.ReadAll(r.Body)
-//	if err != nil {
-//		return nil, app_errors.NewInputError("Request DTO error", err)
-//	}
-//	err = json.Unmarshal(body, &dto)
-//	if err != nil {
-//		return nil, app_errors.NewInputError("Request DTO error", err)
-//	}
-//	err = validator.Validate(dto)
-//	if err != nil {
-//		return nil, app_errors.NewInputError("Request DTO error", err)
-//	}
-//	return dto, nil
-//}

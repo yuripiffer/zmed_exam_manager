@@ -5,6 +5,7 @@ go 1.18
 require (
 	cloud.google.com/go v0.103.0
 	github.com/Netflix/go-env v0.0.0-20220526054621-78278af1949d
+	github.com/SermoDigital/jose v0.9.1
 	github.com/aws/aws-sdk-go-v2 v1.16.7
 	github.com/aws/aws-sdk-go-v2/config v1.15.14
 	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.9.7
