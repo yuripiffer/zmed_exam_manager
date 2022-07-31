@@ -16,6 +16,15 @@ func NewInputError(detail string, err error) AppError {
 		Title:    "Input Error",
 		Detail:   fmt.Sprintf("%s", detail),
 		Err:      err.Error(),
-		ErrorKey: keyInputError,
+		ErrorKey: KeyInputError,
+	}
+}
+
+func NewPatientError(detail string, err error) AppError {
+	return &ErrorStruct{
+		Title:    "Patient Error",
+		Detail:   fmt.Sprintf("%s", detail),
+		Err:      err.Error(),
+		ErrorKey: KeyPatientError,
 	}
 }

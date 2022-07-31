@@ -11,7 +11,9 @@ require (
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.11.20
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.15.9
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.27.1
+	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.8.0
+	gopkg.in/validator.v2 v2.0.1
 )
 
 require (

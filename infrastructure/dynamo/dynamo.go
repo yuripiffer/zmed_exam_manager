@@ -25,10 +25,10 @@ func NewRepository(awsConfig aws.Config, table string) *repository {
 	}
 }
 
-func (r *repository) Persist(ctx context.Context, data *model.Exam) app_errors.AppError {
+func (r *repository) Persist(ctx context.Context, data *model.Exam) (*model.Exam, app_errors.AppError) {
 	dataMap, err := attributevalue.MarshalMap(data)
 	if err != nil {
-		return app_errors.NewInternalServerError("Error in persist Dynamodb", err)
+		return nil, app_errors.NewInternalServerError("Error in persist Dynamodb", err)
 	}
 
 	params := &dynamodb.PutItemInput{
@@ -36,11 +36,15 @@ func (r *repository) Persist(ctx context.Context, data *model.Exam) app_errors.A
 		Item:      dataMap,
 	}
 
-	_, err = r.client.PutItem(ctx, params)
+	result, err := r.client.PutItem(ctx, params)
 	if err != nil {
-		return app_errors.NewInternalServerError("Error in persist Dynamodb", err)
+		return nil, app_errors.NewInternalServerError("Error in persist Dynamodb", err)
 	}
-	return nil
+
+	exam := model.Exam{}
+	err = attributevalue.UnmarshalMap(result.Attributes, &exam)
+
+	return &exam, nil
 }
 
 func (r *repository) FindById(id string) (*model.Exam, app_errors.AppError) {
