@@ -26,7 +26,7 @@ func (s *service) RegisterExam(ctx context.Context, dto interface_input.Register
 		Id:        uuid.New().String(),
 		PatientId: patient.Id,
 		Status:    "Register",
-		ExamType:  11,
+		ExamType:  *dto.ExamType,
 		CreatedAt: time.Now().String(),
 		UpdatedAt: time.Now().String(),
 		IsRevoked: false,

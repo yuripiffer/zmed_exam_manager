@@ -16,6 +16,7 @@ type ExamsUseCase interface {
 
 type RegisterRequestDTO struct {
 	Document string `json:"document"`
+	ExamType *int   `json:"exam_type"`
 }
 
 type FindRequestDTO struct {
