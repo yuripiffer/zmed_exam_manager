@@ -56,4 +56,4 @@ It makes part of a software architecture with microservices and AWS infrastructu
 
 
 ## License
-This is an open-source and free software released 
+This is an open-source and free software release.

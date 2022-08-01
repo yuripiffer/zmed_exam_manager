@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/gorilla/mux"
+	"net/http"
 	"zmed_exam_manager/domain/exams"
 	"zmed_exam_manager/infrastructure/config"
 	"zmed_exam_manager/infrastructure/dynamo"
@@ -24,4 +25,8 @@ func main() {
 
 	r := mux.NewRouter()
 	web.ConfigureExamsRoutes(examsUseCase, r)
+	err := http.ListenAndServe(":85", r)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
