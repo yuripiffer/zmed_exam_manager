@@ -11,7 +11,7 @@ import (
 )
 
 func (s *service) StartExam(ctx context.Context, dto interface_input.StartRequestDTO) (string, app_errors.AppError) {
-	patient, appError := s.patientProvider.GetPatient(dto.Document)
+	patient, appError := s.patientProvider.GetPatient(*dto.Document)
 	if appError != nil {
 		return "", appError
 	}
@@ -20,7 +20,7 @@ func (s *service) StartExam(ctx context.Context, dto interface_input.StartReques
 		return "", app_errors.NewPatientError("Patient not eligible", errors.New("id or status error"))
 	}
 
-	exam, appError := s.examsProvider.FindById(dto.ExamId)
+	exam, appError := s.examsProvider.FindById(*dto.ExamId)
 	if appError != nil {
 		return "", appError
 	}
