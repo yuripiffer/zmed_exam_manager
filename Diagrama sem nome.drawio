@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2022-08-01T00:23:08.887Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36" etag="3GfSExisrb2iXi3A-_C8" version="20.2.2" type="github">
+<mxfile host="app.diagrams.net" modified="2022-08-01T00:23:23.888Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36" etag="PhYKOOHM-wLetLGIXZEV" version="20.2.2" type="github">
   <diagram id="aTwo-jRHDP2fjrBcB7LK" name="Página-1">
-    <mxGraphModel dx="1335" dy="692" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1929" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -11,7 +11,7 @@
           <mxGeometry x="260" y="200" width="80" height="100" as="geometry" />
         </mxCell>
         <mxCell id="jcrQPi3_A0F0jYqwktfK-5" value="" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.dynamo_db;fillColor=#2E73B8;gradientColor=none;" vertex="1" parent="1">
-          <mxGeometry x="600" y="203.25" width="64" height="73.5" as="geometry" />
+          <mxGeometry x="600" y="203.25" width="70" height="76.75" as="geometry" />
         </mxCell>
         <mxCell id="jcrQPi3_A0F0jYqwktfK-6" value="zmed_exam_table&#xa;(DynamoDB)" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
           <mxGeometry x="600" y="310" width="180" height="200" as="geometry">
@@ -22,12 +22,15 @@
           <mxGeometry y="30" width="180" height="170" as="geometry" />
         </mxCell>
         <mxCell id="jcrQPi3_A0F0jYqwktfK-11" value="zmed_patient_table&#xa;(Postgres)" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
-          <mxGeometry x="260" y="310" width="180" height="240" as="geometry">
+          <mxGeometry x="260" y="310" width="180" height="450" as="geometry">
             <mxRectangle x="620" y="280" width="140" height="40" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
         <mxCell id="jcrQPi3_A0F0jYqwktfK-12" value="&lt;ul&gt;&lt;li&gt;id&lt;/li&gt;&lt;li&gt;document&lt;/li&gt;&lt;li&gt;name&lt;/li&gt;&lt;li&gt;birthdate&lt;/li&gt;&lt;li&gt;created_at&lt;/li&gt;&lt;li&gt;updated_at&lt;/li&gt;&lt;li&gt;deleted_at&lt;/li&gt;&lt;li&gt;status&lt;/li&gt;&lt;li&gt;cellphone&lt;/li&gt;&lt;li&gt;cellphone_verified_at&lt;/li&gt;&lt;li&gt;email&lt;/li&gt;&lt;li&gt;email_verified_at&lt;/li&gt;&lt;/ul&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;" vertex="1" parent="jcrQPi3_A0F0jYqwktfK-11">
           <mxGeometry y="30" width="180" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="jcrQPi3_A0F0jYqwktfK-43" value="&lt;ul&gt;&lt;li&gt;id&lt;/li&gt;&lt;li&gt;document&lt;/li&gt;&lt;li&gt;name&lt;/li&gt;&lt;li&gt;birthdate&lt;/li&gt;&lt;li&gt;created_at&lt;/li&gt;&lt;li&gt;updated_at&lt;/li&gt;&lt;li&gt;deleted_at&lt;/li&gt;&lt;li&gt;status&lt;/li&gt;&lt;li&gt;cellphone&lt;/li&gt;&lt;li&gt;cellphone_verified_at&lt;/li&gt;&lt;li&gt;email&lt;/li&gt;&lt;li&gt;email_verified_at&lt;/li&gt;&lt;/ul&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;" vertex="1" parent="jcrQPi3_A0F0jYqwktfK-11">
+          <mxGeometry y="240" width="180" height="210" as="geometry" />
         </mxCell>
         <mxCell id="jcrQPi3_A0F0jYqwktfK-41" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;" edge="1" parent="1" source="jcrQPi3_A0F0jYqwktfK-14" target="jcrQPi3_A0F0jYqwktfK-4">
           <mxGeometry relative="1" as="geometry">
