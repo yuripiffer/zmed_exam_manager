@@ -15,3 +15,45 @@ It makes part of a software architecture with microservices and AWS infrastructu
 
 
 ## Endpoints
+### Register a new exam request
+- path: "/exam/new"
+- method: Post
+- headers: none
+- params: none
+- body: 
+  - document (string): patient's document
+  - exam_type (int): the exam code
+
+### Get exams from a patient
+- path: "/exams/info"
+- method: Get
+- headers: none
+- params: 
+  - document (string): patient's document
+
+### Register that an exam has started
+- path: "/exam/start"
+- method: Post
+- headers: none
+- params: nome
+- body: 
+  - document (string): patient's document
+  - exam_id (string): uuid id from the exam
+  - exam_type (int): the exam code
+
+
+### Send a text message or an email to a patient that his/her exam is ready.
+- path: "/exams/communicate"
+- method: Post
+- headers: none
+
+## Parallel processing
+
+## Installation
+
+
+### Environment Variables
+
+
+## License
+This is an open-source and free software released 
