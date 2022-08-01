@@ -1,1 +1,78 @@
-<mxfile host="app.diagrams.net" modified="2022-07-31T23:52:04.499Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36" version="20.2.2" etag="PhJGamOpAIQyWqPE3YX9" type="github"><diagram id="aTwo-jRHDP2fjrBcB7LK">UzV2zq1wL0osyPDNT0nNUTV2VTV2LsrPL4GwciucU3NyVI0MMlNUjV1UjYwMgFjVyA2HrCFY1qAgsSg1rwSLBiADYTaQg2Y1AA==</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2022-08-01T00:18:31.165Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36" etag="nJgAN9Q8E_FVnGvZ9NJ2" version="20.2.2" type="github">
+  <diagram id="aTwo-jRHDP2fjrBcB7LK" name="Página-1">
+    <mxGraphModel dx="914" dy="1643" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="jcrQPi3_A0F0jYqwktfK-1" value="Amazon S3" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;strokeColor=#ffffff;fillColor=#232F3E;dashed=0;verticalLabelPosition=middle;verticalAlign=bottom;align=center;html=1;whiteSpace=wrap;fontSize=10;fontStyle=1;spacing=3;shape=mxgraph.aws4.productIcon;prIcon=mxgraph.aws4.s3;" vertex="1" parent="1">
+          <mxGeometry x="210" y="-10" width="80" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="jcrQPi3_A0F0jYqwktfK-4" value="Amazon RDS" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;strokeColor=#ffffff;fillColor=#232F3E;dashed=0;verticalLabelPosition=middle;verticalAlign=bottom;align=center;html=1;whiteSpace=wrap;fontSize=10;fontStyle=1;spacing=3;shape=mxgraph.aws4.productIcon;prIcon=mxgraph.aws4.rds;" vertex="1" parent="1">
+          <mxGeometry x="520" y="-10" width="80" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="jcrQPi3_A0F0jYqwktfK-5" value="" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.dynamo_db;fillColor=#2E73B8;gradientColor=none;" vertex="1" parent="1">
+          <mxGeometry x="520" y="250" width="72" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="jcrQPi3_A0F0jYqwktfK-6" value="zmed_exam_table&#xa;(DynamoDB)" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="610" y="260" width="180" height="200" as="geometry">
+            <mxRectangle x="620" y="280" width="140" height="40" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jcrQPi3_A0F0jYqwktfK-10" value="&lt;ul&gt;&lt;li&gt;exam_id (sort_key)&lt;/li&gt;&lt;li&gt;patient_id&lt;/li&gt;&lt;li&gt;status&lt;/li&gt;&lt;li&gt;exam_type&lt;/li&gt;&lt;li&gt;created_at&lt;/li&gt;&lt;li&gt;updated_at&lt;/li&gt;&lt;li&gt;ended_at&lt;/li&gt;&lt;li&gt;is_revoked&lt;/li&gt;&lt;/ul&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;" vertex="1" parent="jcrQPi3_A0F0jYqwktfK-6">
+          <mxGeometry y="30" width="180" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="jcrQPi3_A0F0jYqwktfK-11" value="zmed_patient_table&#xa;(Postgres)" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="610" y="-10" width="180" height="240" as="geometry">
+            <mxRectangle x="620" y="280" width="140" height="40" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jcrQPi3_A0F0jYqwktfK-12" value="&lt;ul&gt;&lt;li&gt;id&lt;/li&gt;&lt;li&gt;document&lt;/li&gt;&lt;li&gt;name&lt;/li&gt;&lt;li&gt;birthdate&lt;/li&gt;&lt;li&gt;created_at&lt;/li&gt;&lt;li&gt;updated_at&lt;/li&gt;&lt;li&gt;deleted_at&lt;/li&gt;&lt;li&gt;status&lt;/li&gt;&lt;li&gt;cellphone&lt;/li&gt;&lt;li&gt;cellphone_verified_at&lt;/li&gt;&lt;li&gt;email&lt;/li&gt;&lt;li&gt;email_verified_at&lt;/li&gt;&lt;/ul&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;" vertex="1" parent="jcrQPi3_A0F0jYqwktfK-11">
+          <mxGeometry y="30" width="180" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="jcrQPi3_A0F0jYqwktfK-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="jcrQPi3_A0F0jYqwktfK-14" target="jcrQPi3_A0F0jYqwktfK-4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="520" y="30" />
+              <mxPoint x="520" y="30" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jcrQPi3_A0F0jYqwktfK-14" value="" style="shape=ext;double=1;rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="320" y="-10" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="jcrQPi3_A0F0jYqwktfK-20" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Go_Logo_Blue.svg/1200px-Go_Logo_Blue.svg.png;" vertex="1" parent="1">
+          <mxGeometry x="330" width="26.67" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="jcrQPi3_A0F0jYqwktfK-21" value="&lt;b&gt;zmed_patient_manager&lt;/b&gt;&lt;br&gt;(microservice)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="375" y="18" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jcrQPi3_A0F0jYqwktfK-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="jcrQPi3_A0F0jYqwktfK-25" target="jcrQPi3_A0F0jYqwktfK-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="jcrQPi3_A0F0jYqwktfK-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="jcrQPi3_A0F0jYqwktfK-25" target="jcrQPi3_A0F0jYqwktfK-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="jcrQPi3_A0F0jYqwktfK-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;strokeColor=#0000CC;" edge="1" parent="1" source="jcrQPi3_A0F0jYqwktfK-25" target="jcrQPi3_A0F0jYqwktfK-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="jcrQPi3_A0F0jYqwktfK-25" value="" style="shape=ext;double=1;rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="320" y="150" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="jcrQPi3_A0F0jYqwktfK-26" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Go_Logo_Blue.svg/1200px-Go_Logo_Blue.svg.png;" vertex="1" parent="1">
+          <mxGeometry x="330" y="160" width="26.67" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="jcrQPi3_A0F0jYqwktfK-27" value="&lt;b&gt;zmed_exam_manager&lt;/b&gt;&lt;br&gt;(microservice)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="375" y="178" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jcrQPi3_A0F0jYqwktfK-33" value="zmed_exams_results&#xa;(S3 storage)" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+          <mxGeometry x="30" y="-10" width="170" height="160" as="geometry">
+            <mxRectangle x="620" y="280" width="140" height="40" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jcrQPi3_A0F0jYqwktfK-34" value="&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;br&gt;Folders (keys)&lt;/span&gt;&lt;br&gt;&lt;ul&gt;&lt;li&gt;YYYY_MM/completed&lt;/li&gt;&lt;li&gt;YYYY_MM/processed&lt;/li&gt;&lt;li&gt;YYYY_MM/stuck&lt;/li&gt;&lt;li&gt;YYYY_MM/denied&lt;/li&gt;&lt;li&gt;YYYY_MM/deleted&lt;/li&gt;&lt;/ul&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;" vertex="1" parent="jcrQPi3_A0F0jYqwktfK-33">
+          <mxGeometry y="30" width="170" height="130" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
