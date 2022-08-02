@@ -24,8 +24,8 @@ It makes part of a software architecture with microservices and AWS infrastructu
   - document (string): patient's document
   - exam_type (int): the exam code
 > An attendant allows a patient to undergo a medical examination. The patient's document and the type of exam to be performed are informed.
-The microservice makes a request to zmed_patient_manager. If the user is not active or the exam code does not exist, it returns an error.
-The medical exam record is persisted with status "Registered" in dynamoDB and the microservice returns the body as responseDTO on success.
+The microservice makes a request to zmed_patient_manager. If the patient is not active or the exam code does not exist, it returns an error.
+The medical exam record is persisted with status "Registered" in dynamoDB and the microservice returns its body as responseDTO on success.
 -----
 ### Get exams from a patient
 - path: "/exams/info"
@@ -34,7 +34,7 @@ The medical exam record is persisted with status "Registered" in dynamoDB and th
 - params: 
   - document (string): patient's document
 - body: none
->All exams for a user are returned from dynamoDB. The attendant only needs to inform the patient's document.
+>All exams for a patient are returned from dynamoDB. The attendant only needs to inform the patient's document.
 ----
 ### Register that an exam has started
 - path: "/exam/start"
@@ -46,7 +46,9 @@ The medical exam record is persisted with status "Registered" in dynamoDB and th
   - exam_id (string): uuid id from the exam
   - exam_type (int): the exam code
 > The attendant responsible for performing the exam informs the document, the exam id registered and the type of exam to be performed. 
-> If the exam is not registered, it will return an error. The exam status is updated in dynamoDB for Started. Returns a serialized JWT token that must be inserted into the exam result to be processed.
+> If the exam is not registered, it will return an error. 
+> The exam is updated in dynamoDB for "Started" status. 
+> Returns a serialized JWT token that must be inserted into the exam result paper which will be uploaded to the S3 bucket to be processed.
 -----
 ### Send a text message or an email to a patient that his/her exam is ready.
 - path: "/exams/communicate"
@@ -56,7 +58,11 @@ The medical exam record is persisted with status "Registered" in dynamoDB and th
 - body:
   - exam_token (string): JWT token with exam's info
   - result_token (string): JWT token with the exam's result info
-> The test results will normally be processed by the goroutines. This endpoint is used for cases where an exam was not processed automatically and there is a need for an attendant to inform the exam result manually. The request must contain the exam token and the exam result token. The tokens are deserialized. Returns an error in case of data inconsistency. In case of success, the status of "Finished" persists in dynamoDB, searches for the user's contact in zmed_patient_manager and sends a text message or email informing that the exam has been finished.
+> The test results will normally be processed by goroutines. 
+> This endpoint is used for cases where an exam result was not processed automatically and there is a need for an attendant to inform it manually. 
+> The request must contain the exam token and the exam result token. 
+> Both tokens are then deserialized. Returns an error in case of data inconsistency. 
+> In case of success, the exam is updated with status "Finished" in dynamoDB, then it searches for the user's contact in zmed_patient_manager and sends a text message or email informing that the exam has been finished.
 -----
 ## Parallel processing
 
