@@ -25,7 +25,7 @@ func (s *service) RegisterExam(ctx context.Context, dto interface_input.Register
 	data := model.Exam{
 		Id:        uuid.New().String(),
 		PatientId: patient.Id,
-		Status:    "Register",
+		Status:    "Registered",
 		ExamType:  *dto.ExamType,
 		CreatedAt: time.Now().String(),
 		UpdatedAt: time.Now().String(),
