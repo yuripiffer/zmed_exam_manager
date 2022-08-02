@@ -65,8 +65,12 @@ The medical exam record is persisted with status "Registered" in dynamoDB and th
 > In case of success, the exam is updated with status "Finished" in dynamoDB, then it searches for the user's contact in zmed_patient_manager and sends a text message or email informing that the exam has been finished.
 -----
 ## Parallel processing
+> Every time an exam is uploaded to the S3's "/completed" folder a goroutine will pull this exam and process it. 
+> If successful, the goroutine performs the same steps as the "/exams/communicate" endpoint. 
+> In case it cannot handle the exam tokens, it will update the status in dynamoDB to "Stuck" and move the file from the "/completed"  to "/stuck" folder.
+> If there is any inconsistency with the patient, the exam is moved to the "/denied" folder. If the exam has "Revoked" status in dynamoDB, the result is moved to the "/deleted" folder.
 
-## Installation
+# Installation
 ### Environment Variables
 ```azure
 ZMED_DYNAMO_EXAM_MANAGER_TABLE_NAME=zmed_exam_table
