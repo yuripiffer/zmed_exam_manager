@@ -27,6 +27,6 @@ func main() {
 	web.ConfigureExamsRoutes(examsUseCase, r)
 	err := http.ListenAndServe(":85", r)
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
 }
