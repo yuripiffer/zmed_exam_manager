@@ -2,7 +2,6 @@ package dynamo
 
 import (
 	"context"
-	"fmt"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
@@ -18,7 +17,6 @@ type repository struct {
 
 func NewRepository(awsConfig aws.Config, table string) *repository {
 	client := dynamodb.NewFromConfig(awsConfig)
-	fmt.Println(client)
 	return &repository{
 		client: client,
 		table:  table,
