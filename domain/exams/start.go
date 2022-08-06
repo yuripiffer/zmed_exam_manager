@@ -4,20 +4,20 @@ import (
 	"context"
 	"errors"
 	"time"
-	"zmed_exam_manager/app_errors"
 	"zmed_exam_manager/interface_input"
-	"zmed_exam_manager/model"
-	"zmed_exam_manager/util"
+	app_errors2 "zmed_exam_manager/pkg/app_errors"
+	"zmed_exam_manager/pkg/model/zmed_model"
+	"zmed_exam_manager/utils"
 )
 
-func (s *service) StartExam(ctx context.Context, dto interface_input.StartRequestDTO) (string, app_errors.AppError) {
+func (s *service) StartExam(ctx context.Context, dto interface_input.StartRequestDTO) (string, app_errors2.AppError) {
 	patient, appError := s.patientProvider.GetPatient(*dto.Document)
 	if appError != nil {
 		return "", appError
 	}
 
-	if patient.Id == "" || patient.Status != model.StatusActive {
-		return "", app_errors.NewPatientError("Patient not eligible", errors.New("id or status error"))
+	if patient.Id == "" || patient.Status != zmed_model.StatusActive {
+		return "", app_errors2.NewPatientError("Patient not eligible", errors.New("id or status error"))
 	}
 
 	exam, appError := s.examsProvider.FindById(*dto.ExamId)
@@ -26,10 +26,10 @@ func (s *service) StartExam(ctx context.Context, dto interface_input.StartReques
 	}
 
 	if exam.PatientId != patient.Id {
-		return "", app_errors.NewPatientError("Patient not eligible", errors.New("id or status error"))
+		return "", app_errors2.NewPatientError("Patient not eligible", errors.New("id or status error"))
 	}
 
-	data := model.Exam{
+	data := zmed_model.Exam{
 		Id:        exam.Id,
 		Status:    "Started",
 		UpdatedAt: time.Now().String(),
@@ -39,6 +39,6 @@ func (s *service) StartExam(ctx context.Context, dto interface_input.StartReques
 		return "", appError
 	}
 
-	token, appError := util.GenerateExamToken(exam.PatientId, exam.Id, exam.ExamType)
+	token, appError := utils.GenerateExamToken(exam.PatientId, exam.Id, exam.ExamType)
 	return token, nil
 }

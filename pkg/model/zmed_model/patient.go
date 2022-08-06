@@ -1,4 +1,4 @@
-package model
+package zmed_model
 
 import (
 	"cloud.google.com/go/civil"
