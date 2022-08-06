@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"zmed_exam_manager/app_errors"
+	"zmed_exam_manager/pkg/app_errors"
 )
 
 type successResponse struct {

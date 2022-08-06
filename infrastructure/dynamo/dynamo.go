@@ -7,8 +7,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
-	"zmed_exam_manager/app_errors"
-	"zmed_exam_manager/model"
+	app_errors2 "zmed_exam_manager/pkg/app_errors"
+	"zmed_exam_manager/pkg/model/zmed_model"
 )
 
 type repository struct {
@@ -25,10 +25,10 @@ func NewRepository(awsConfig aws.Config, table string) *repository {
 	}
 }
 
-func (r *repository) Persist(ctx context.Context, data *model.Exam) (*model.Exam, app_errors.AppError) {
+func (r *repository) Persist(ctx context.Context, data *zmed_model.Exam) (*zmed_model.Exam, app_errors2.AppError) {
 	dataMap, err := attributevalue.MarshalMap(data)
 	if err != nil {
-		return nil, app_errors.NewInternalServerError("Error in persist Dynamodb", err)
+		return nil, app_errors2.NewInternalServerError("Error in persist Dynamodb", err)
 	}
 
 	params := &dynamodb.PutItemInput{
@@ -38,16 +38,16 @@ func (r *repository) Persist(ctx context.Context, data *model.Exam) (*model.Exam
 
 	result, err := r.client.PutItem(ctx, params)
 	if err != nil {
-		return nil, app_errors.NewInternalServerError("Error in persist Dynamodb", err)
+		return nil, app_errors2.NewInternalServerError("Error in persist Dynamodb", err)
 	}
 
-	exam := model.Exam{}
+	exam := zmed_model.Exam{}
 	err = attributevalue.UnmarshalMap(result.Attributes, &exam)
 
 	return &exam, nil
 }
 
-func (r *repository) FindById(id string) (*model.Exam, app_errors.AppError) {
+func (r *repository) FindById(id string) (*zmed_model.Exam, app_errors2.AppError) {
 	out, err := r.client.GetItem(context.TODO(), &dynamodb.GetItemInput{
 		TableName: aws.String(r.table),
 		Key: map[string]types.AttributeValue{
@@ -55,17 +55,17 @@ func (r *repository) FindById(id string) (*model.Exam, app_errors.AppError) {
 		},
 	})
 	if err != nil {
-		return nil, app_errors.NewInternalServerError("Error in persist Dynamodb", err)
+		return nil, app_errors2.NewInternalServerError("Error in persist Dynamodb", err)
 	}
-	var exam *model.Exam
+	var exam *zmed_model.Exam
 	err = attributevalue.UnmarshalMap(out.Item, exam)
 	if err != nil {
-		return nil, app_errors.NewInternalServerError("Error in Dynamodb unmarshal", err)
+		return nil, app_errors2.NewInternalServerError("Error in Dynamodb unmarshal", err)
 	}
 	return exam, nil
 }
 
-func (r *repository) FindExamsByPatientId(ctx context.Context, patientId string) ([]*model.Exam, app_errors.AppError) {
+func (r *repository) FindExamsByPatientId(ctx context.Context, patientId string) ([]*zmed_model.Exam, app_errors2.AppError) {
 	keyConditions := map[string]types.Condition{
 		"patient_id": {
 			ComparisonOperator: "EQ",
@@ -78,7 +78,7 @@ func (r *repository) FindExamsByPatientId(ctx context.Context, patientId string)
 	return r.runQuery(ctx, keyConditions)
 }
 
-func (r *repository) runQuery(ctx context.Context, keyConditions map[string]types.Condition) ([]*model.Exam, app_errors.AppError) {
+func (r *repository) runQuery(ctx context.Context, keyConditions map[string]types.Condition) ([]*zmed_model.Exam, app_errors2.AppError) {
 	var queryInput = dynamodb.QueryInput{
 		TableName:     aws.String(r.table),
 		KeyConditions: keyConditions,
@@ -86,13 +86,13 @@ func (r *repository) runQuery(ctx context.Context, keyConditions map[string]type
 
 	response, err := r.client.Query(ctx, &queryInput)
 	if err != nil {
-		return nil, app_errors.NewInternalServerError("Error in Dynamodb", err)
+		return nil, app_errors2.NewInternalServerError("Error in Dynamodb", err)
 	}
-	var queryResult []*model.Exam
+	var queryResult []*zmed_model.Exam
 
 	err = attributevalue.UnmarshalListOfMaps(response.Items, &queryResult)
 	if err != nil {
-		return nil, app_errors.NewInternalServerError("Error in Dynamodb", err)
+		return nil, app_errors2.NewInternalServerError("Error in Dynamodb", err)
 	}
 	return queryResult, nil
 }
