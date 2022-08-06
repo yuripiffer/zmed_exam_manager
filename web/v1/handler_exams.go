@@ -3,10 +3,10 @@ package v1
 import (
 	"errors"
 	"net/http"
-	"zmed_exam_manager/app_errors"
-	"zmed_exam_manager/app_response"
 	"zmed_exam_manager/interface_input"
-	"zmed_exam_manager/util"
+	"zmed_exam_manager/pkg/app_errors"
+	"zmed_exam_manager/pkg/app_response"
+	"zmed_exam_manager/pkg/utils"
 )
 
 type ExamsV1Handler struct {
@@ -16,7 +16,7 @@ type ExamsV1Handler struct {
 func (h *ExamsV1Handler) NewExam(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	requestDTO := interface_input.RegisterRequestDTO{}
-	_, appError := util.UnmarshalDto(w, r, &requestDTO)
+	_, appError := utils.UnmarshalDto(w, r, &requestDTO)
 	if appError != nil {
 		return
 	}
@@ -42,7 +42,7 @@ func (h *ExamsV1Handler) NewExam(w http.ResponseWriter, r *http.Request) {
 func (h *ExamsV1Handler) FindExamsByPatientId(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	requestDTO := interface_input.FindRequestDTO{}
-	_, appError := util.UnmarshalDto(w, r, &requestDTO)
+	_, appError := utils.UnmarshalDto(w, r, &requestDTO)
 	if appError != nil {
 		return
 	}
@@ -62,7 +62,7 @@ func (h *ExamsV1Handler) FindExamsByPatientId(w http.ResponseWriter, r *http.Req
 func (h *ExamsV1Handler) StartExam(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	requestDTO := interface_input.StartRequestDTO{}
-	_, appError := util.UnmarshalDto(w, r, &requestDTO)
+	_, appError := utils.UnmarshalDto(w, r, &requestDTO)
 	if appError != nil {
 		return
 	}
