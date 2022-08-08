@@ -24,7 +24,7 @@ func HandleExamsResultProcessing(examResultProvider *s3.Repository,
 	ctx := context.Background()
 	pullExamError := 0
 	examKeyChannel = make(chan errorExamKeyData)
-	handleStuckExam(ctx, examResultProvider)
+	go handleStuckExam(ctx, examResultProvider)
 
 	for {
 		objects, appErr := examResultProvider.PullS3CompletedExams(ctx)
