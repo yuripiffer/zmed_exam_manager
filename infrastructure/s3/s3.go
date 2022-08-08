@@ -11,7 +11,7 @@ import (
 	"path"
 	"time"
 	"zmed_exam_manager/infrastructure/config"
-	app_errors2 "zmed_exam_manager/pkg/app_errors"
+	"zmed_exam_manager/pkg/app_errors"
 )
 
 type Repository struct {
@@ -36,14 +36,14 @@ func NewRepository(awsConfig aws.Config) *Repository {
 	}
 }
 
-func (r *Repository) PullS3CompletedExams(ctx context.Context) ([]types.Object, app_errors2.AppError) {
+func (r *Repository) PullS3CompletedExams(ctx context.Context) ([]types.Object, app_errors.AppError) {
 	params := &s3.ListObjectsInput{
 		Bucket: aws.String(r.bucket),
 		Prefix: aws.String(r.completedKey),
 	}
 	listObjectsOutput, err := r.client.ListObjects(ctx, params)
 	if err != nil {
-		return nil, app_errors2.NewInternalServerError("Error in S3", err)
+		return nil, app_errors.NewInternalServerError("Error in S3", err)
 	}
 	if len(listObjectsOutput.Contents) > 0 {
 		return listObjectsOutput.Contents, nil
@@ -51,7 +51,7 @@ func (r *Repository) PullS3CompletedExams(ctx context.Context) ([]types.Object, 
 	return nil, nil
 }
 
-func (r *Repository) MoveExamToProcessedFolder(ctx context.Context, objectKey *string) app_errors2.AppError {
+func (r *Repository) MoveExamToProcessedFolder(ctx context.Context, objectKey *string) app_errors.AppError {
 	srcKey := "/" + r.bucket + "/" + *objectKey
 	destKey := fmt.Sprintf("/%s/%v_%v/%s", r.processedKey, time.Now().Year(), time.Now().Month(), path.Base(*objectKey))
 	_, err := r.client.CopyObject(ctx,
@@ -62,12 +62,12 @@ func (r *Repository) MoveExamToProcessedFolder(ctx context.Context, objectKey *s
 		},
 	)
 	if err != nil {
-		return app_errors2.NewInternalServerError("Error in S3", err)
+		return app_errors.NewInternalServerError("Error in S3", err)
 	}
 	return nil
 }
 
-func (r *Repository) MoveExamToDeletedFolder(ctx context.Context, objectKey *string) app_errors2.AppError {
+func (r *Repository) MoveExamToDeletedFolder(ctx context.Context, objectKey *string) app_errors.AppError {
 	srcKey := "/" + r.bucket + "/" + *objectKey
 	destKey := fmt.Sprintf("/%s/%v_%v/%s", r.deletedKey, time.Now().Year(), time.Now().Month(), path.Base(*objectKey))
 	_, err := r.client.CopyObject(ctx,
@@ -78,12 +78,12 @@ func (r *Repository) MoveExamToDeletedFolder(ctx context.Context, objectKey *str
 		},
 	)
 	if err != nil {
-		return app_errors2.NewInternalServerError("Error in S3", err)
+		return app_errors.NewInternalServerError("Error in S3", err)
 	}
 	return nil
 }
 
-func (r *Repository) MoveExamToStuckFolder(ctx context.Context, objectKey *string) app_errors2.AppError {
+func (r *Repository) MoveExamToStuckFolder(ctx context.Context, objectKey *string) app_errors.AppError {
 	srcKey := "/" + r.bucket + "/" + *objectKey
 	destKey := fmt.Sprintf("/%s/%v_%v/%s", r.stuckKey, time.Now().Year(), time.Now().Month(), path.Base(*objectKey))
 	_, err := r.client.CopyObject(ctx,
@@ -94,7 +94,7 @@ func (r *Repository) MoveExamToStuckFolder(ctx context.Context, objectKey *strin
 		},
 	)
 	if err != nil {
-		return app_errors2.NewInternalServerError("Error in S3", err)
+		return app_errors.NewInternalServerError("Error in S3", err)
 	}
 	return nil
 }

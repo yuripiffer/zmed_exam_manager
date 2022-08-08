@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"reflect"
 	"strings"
-	app_errors2 "zmed_exam_manager/pkg/app_errors"
+	"zmed_exam_manager/pkg/app_errors"
 	"zmed_exam_manager/pkg/app_response"
 )
 
@@ -18,10 +18,10 @@ type dtoFieldInfo struct {
 	dtoUnmarshalTag string
 }
 
-func UnmarshalDto(w http.ResponseWriter, r *http.Request, dto interface{}) ([]string, app_errors2.AppError) {
+func UnmarshalDto(w http.ResponseWriter, r *http.Request, dto interface{}) ([]string, app_errors.AppError) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		appError := app_errors2.NewInputError("Request DTO error", err)
+		appError := app_errors.NewInputError("Request DTO error", err)
 		app_response.ERROR(w, http.StatusBadRequest, appError)
 		return nil, appError
 	}
@@ -32,7 +32,7 @@ func UnmarshalDto(w http.ResponseWriter, r *http.Request, dto interface{}) ([]st
 	requestBody := map[string]interface{}{}
 	err = json.NewDecoder(strings.NewReader(string(body))).Decode(&requestBody)
 	if err != nil {
-		appError = app_errors2.NewInputError("Request DTO error", err)
+		appError = app_errors.NewInputError("Request DTO error", err)
 		app_response.ERROR(w, http.StatusBadRequest, appError)
 		return nil, appError
 	}
@@ -59,16 +59,16 @@ func UnmarshalDto(w http.ResponseWriter, r *http.Request, dto interface{}) ([]st
 	return updatedFields, nil
 }
 
-func unmarshalBodyToDto(w http.ResponseWriter, body []byte, dto interface{}) app_errors2.AppError {
+func unmarshalBodyToDto(w http.ResponseWriter, body []byte, dto interface{}) app_errors.AppError {
 	err := json.Unmarshal(body, dto)
 	if err != nil {
-		appError := app_errors2.NewInputError("Request DTO error", err)
+		appError := app_errors.NewInputError("Request DTO error", err)
 		app_response.ERROR(w, http.StatusBadRequest, appError)
 		return appError
 	}
 
 	if err := validator.Validate(dto); err != nil {
-		appError := app_errors2.NewInputError("Request DTO error", err)
+		appError := app_errors.NewInputError("Request DTO error", err)
 		app_response.ERROR(w, http.StatusBadRequest, appError)
 		return appError
 	}

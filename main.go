@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
 	"zmed_exam_manager/domain/exams"
@@ -22,7 +21,6 @@ func main() {
 	patientProvider := patient_provider.NewProvider()
 
 	examsUseCase := exams.New(patientProvider, examsRepository)
-	fmt.Println(examResultProvider)
 
 	go script.HandleExamsResultProcessing(examResultProvider, examsRepository)
 
