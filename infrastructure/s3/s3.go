@@ -14,7 +14,7 @@ import (
 	app_errors2 "zmed_exam_manager/pkg/app_errors"
 )
 
-type repository struct {
+type Repository struct {
 	client       *s3.Client
 	bucket       string
 	completedKey string
@@ -24,8 +24,8 @@ type repository struct {
 	deletedKey   string
 }
 
-func NewRepository(awsConfig aws.Config) *repository {
-	return &repository{
+func NewRepository(awsConfig aws.Config) *Repository {
+	return &Repository{
 		client:       s3.NewFromConfig(awsConfig),
 		bucket:       config.ENV.S3Bucket,
 		completedKey: config.ENV.S3CompletedKey,
@@ -36,7 +36,7 @@ func NewRepository(awsConfig aws.Config) *repository {
 	}
 }
 
-func (r *repository) PullS3CompletedExams(ctx context.Context) ([]types.Object, app_errors2.AppError) {
+func (r *Repository) PullS3CompletedExams(ctx context.Context) ([]types.Object, app_errors2.AppError) {
 	params := &s3.ListObjectsInput{
 		Bucket: aws.String(r.bucket),
 		Prefix: aws.String(r.completedKey),
@@ -51,7 +51,7 @@ func (r *repository) PullS3CompletedExams(ctx context.Context) ([]types.Object, 
 	return nil, nil
 }
 
-func (r *repository) MoveExamToProcessedFolder(ctx context.Context, objectKey *string) app_errors2.AppError {
+func (r *Repository) MoveExamToProcessedFolder(ctx context.Context, objectKey *string) app_errors2.AppError {
 	srcKey := "/" + r.bucket + "/" + *objectKey
 	destKey := fmt.Sprintf("/%s/%v_%v/%s", r.processedKey, time.Now().Year(), time.Now().Month(), path.Base(*objectKey))
 	_, err := r.client.CopyObject(ctx,
@@ -67,7 +67,7 @@ func (r *repository) MoveExamToProcessedFolder(ctx context.Context, objectKey *s
 	return nil
 }
 
-func (r *repository) MoveExamToDeletedFolder(ctx context.Context, objectKey *string) app_errors2.AppError {
+func (r *Repository) MoveExamToDeletedFolder(ctx context.Context, objectKey *string) app_errors2.AppError {
 	srcKey := "/" + r.bucket + "/" + *objectKey
 	destKey := fmt.Sprintf("/%s/%v_%v/%s", r.deletedKey, time.Now().Year(), time.Now().Month(), path.Base(*objectKey))
 	_, err := r.client.CopyObject(ctx,
@@ -83,7 +83,7 @@ func (r *repository) MoveExamToDeletedFolder(ctx context.Context, objectKey *str
 	return nil
 }
 
-func (r *repository) MoveExamToStuckFolder(ctx context.Context, objectKey *string) app_errors2.AppError {
+func (r *Repository) MoveExamToStuckFolder(ctx context.Context, objectKey *string) app_errors2.AppError {
 	srcKey := "/" + r.bucket + "/" + *objectKey
 	destKey := fmt.Sprintf("/%s/%v_%v/%s", r.stuckKey, time.Now().Year(), time.Now().Month(), path.Base(*objectKey))
 	_, err := r.client.CopyObject(ctx,
