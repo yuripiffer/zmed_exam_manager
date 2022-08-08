@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"time"
 	"zmed_exam_manager/infrastructure/config"
-	app_errors2 "zmed_exam_manager/pkg/app_errors"
+	"zmed_exam_manager/pkg/app_errors"
 	"zmed_exam_manager/pkg/model/zmed_model"
 )
 
@@ -24,7 +24,7 @@ func NewProvider() *provider {
 	}
 }
 
-func (p *provider) GetPatient(document string) (*zmed_model.Patient, app_errors2.AppError) {
+func (p *provider) GetPatient(document string) (*zmed_model.Patient, app_errors.AppError) {
 	url := fmt.Sprintf("%s/%s", p.host, p.getPatientPath)
 
 	var payload = map[string]interface{}{
@@ -32,12 +32,12 @@ func (p *provider) GetPatient(document string) (*zmed_model.Patient, app_errors2
 	}
 	payloadJson, err := json.Marshal(payload)
 	if err != nil {
-		return nil, app_errors2.NewInternalServerError("Get Patient Request Error", err)
+		return nil, app_errors.NewInternalServerError("Get Patient Request Error", err)
 	}
 
 	request, err := http.NewRequest("POST", url, bytes.NewBuffer(payloadJson))
 	if err != nil {
-		return nil, app_errors2.NewInternalServerError("Get Patient Request Error", err)
+		return nil, app_errors.NewInternalServerError("Get Patient Request Error", err)
 	}
 
 	request.Header.Set("Content-Type", "application/json")
@@ -46,11 +46,11 @@ func (p *provider) GetPatient(document string) (*zmed_model.Patient, app_errors2
 	response, err := httpClient.Do(request)
 	defer response.Body.Close()
 	if err != nil {
-		return nil, app_errors2.NewInternalServerError("Get Patient Request Error", err)
+		return nil, app_errors.NewInternalServerError("Get Patient Request Error", err)
 	}
 
 	if response.StatusCode != http.StatusOK {
-		return nil, app_errors2.NewInternalServerError("Get Patient Request Error", err)
+		return nil, app_errors.NewInternalServerError("Get Patient Request Error", err)
 	}
 
 	responseBody, _ := ioutil.ReadAll(response.Body)
@@ -58,7 +58,7 @@ func (p *provider) GetPatient(document string) (*zmed_model.Patient, app_errors2
 
 	err = json.Unmarshal(responseBody, &patient)
 	if err != nil {
-		return nil, app_errors2.NewInternalServerError("Get Patient Request Error", err)
+		return nil, app_errors.NewInternalServerError("Get Patient Request Error", err)
 	}
 	return patient, nil
 }

@@ -6,12 +6,12 @@ import (
 	"github.com/google/uuid"
 	"time"
 	"zmed_exam_manager/interface_input"
-	app_errors2 "zmed_exam_manager/pkg/app_errors"
+	"zmed_exam_manager/pkg/app_errors"
 	"zmed_exam_manager/pkg/model/zmed_model"
 )
 
 func (s *service) RegisterExam(ctx context.Context, dto interface_input.RegisterRequestDTO) (
-	*zmed_model.Exam, app_errors2.AppError) {
+	*zmed_model.Exam, app_errors.AppError) {
 
 	patient, appError := s.patientProvider.GetPatient(dto.Document)
 	if appError != nil {
@@ -19,7 +19,7 @@ func (s *service) RegisterExam(ctx context.Context, dto interface_input.Register
 	}
 
 	if patient.Id == "" || patient.Status != zmed_model.StatusActive {
-		return nil, app_errors2.NewPatientError("Patient not eligible", errors.New("id or status error"))
+		return nil, app_errors.NewPatientError("Patient not eligible", errors.New("id or status error"))
 	}
 
 	data := zmed_model.Exam{
