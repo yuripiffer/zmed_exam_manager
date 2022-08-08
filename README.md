@@ -67,7 +67,7 @@ The medical exam record is persisted with status "Registered" in dynamoDB and th
 ## Parallel processing
 > Every time an exam is uploaded to the S3's "/completed" folder a goroutine will pull this exam and process it. 
 > If successful, the goroutine performs the same steps as the "/exams/communicate" endpoint. 
-> In case it cannot handle the exam tokens, it will update the status in dynamoDB to "Stuck" and move the file from the "/completed"  to "/stuck" folder.
+> In case it cannot handle the exam tokens, it will move the file from the "/completed"  to the "/stuck" folder.
 > If there is any inconsistency with the patient, the exam is moved to the "/denied" folder. If the exam has "Revoked" status in dynamoDB, the result is moved to the "/deleted" folder.
 
 ## Uploading exam results
