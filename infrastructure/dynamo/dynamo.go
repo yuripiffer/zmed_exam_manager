@@ -10,20 +10,20 @@ import (
 	"zmed_exam_manager/pkg/model/zmed_model"
 )
 
-type repository struct {
+type Repository struct {
 	client *dynamodb.Client
 	table  string
 }
 
-func NewRepository(awsConfig aws.Config, table string) *repository {
+func NewRepository(awsConfig aws.Config, table string) *Repository {
 	client := dynamodb.NewFromConfig(awsConfig)
-	return &repository{
+	return &Repository{
 		client: client,
 		table:  table,
 	}
 }
 
-func (r *repository) Persist(ctx context.Context, data *zmed_model.Exam) (*zmed_model.Exam, app_errors2.AppError) {
+func (r *Repository) Persist(ctx context.Context, data *zmed_model.Exam) (*zmed_model.Exam, app_errors2.AppError) {
 	dataMap, err := attributevalue.MarshalMap(data)
 	if err != nil {
 		return nil, app_errors2.NewInternalServerError("Error in persist Dynamodb", err)
@@ -45,7 +45,7 @@ func (r *repository) Persist(ctx context.Context, data *zmed_model.Exam) (*zmed_
 	return &exam, nil
 }
 
-func (r *repository) FindById(id string) (*zmed_model.Exam, app_errors2.AppError) {
+func (r *Repository) FindById(id string) (*zmed_model.Exam, app_errors2.AppError) {
 	out, err := r.client.GetItem(context.TODO(), &dynamodb.GetItemInput{
 		TableName: aws.String(r.table),
 		Key: map[string]types.AttributeValue{
@@ -63,7 +63,7 @@ func (r *repository) FindById(id string) (*zmed_model.Exam, app_errors2.AppError
 	return exam, nil
 }
 
-func (r *repository) FindExamsByPatientId(ctx context.Context, patientId string) ([]*zmed_model.Exam, app_errors2.AppError) {
+func (r *Repository) FindExamsByPatientId(ctx context.Context, patientId string) ([]*zmed_model.Exam, app_errors2.AppError) {
 	keyConditions := map[string]types.Condition{
 		"patient_id": {
 			ComparisonOperator: "EQ",
@@ -76,7 +76,7 @@ func (r *repository) FindExamsByPatientId(ctx context.Context, patientId string)
 	return r.runQuery(ctx, keyConditions)
 }
 
-func (r *repository) runQuery(ctx context.Context, keyConditions map[string]types.Condition) ([]*zmed_model.Exam, app_errors2.AppError) {
+func (r *Repository) runQuery(ctx context.Context, keyConditions map[string]types.Condition) ([]*zmed_model.Exam, app_errors2.AppError) {
 	var queryInput = dynamodb.QueryInput{
 		TableName:     aws.String(r.table),
 		KeyConditions: keyConditions,

@@ -5,6 +5,7 @@ import (
 	"github.com/gorilla/mux"
 	"net/http"
 	"zmed_exam_manager/domain/exams"
+	"zmed_exam_manager/domain/script"
 	"zmed_exam_manager/infrastructure/config"
 	"zmed_exam_manager/infrastructure/dynamo"
 	"zmed_exam_manager/infrastructure/patient_provider"
@@ -16,12 +17,14 @@ func main() {
 	config.PopulateEnv()
 
 	awsConfig := config.InitAws()
-	ExamsRepository := dynamo.NewRepository(awsConfig, config.ENV.DynamoExamManagerTableName)
+	examsRepository := dynamo.NewRepository(awsConfig, config.ENV.DynamoExamManagerTableName)
 	examResultProvider := s3.NewRepository(awsConfig)
 	patientProvider := patient_provider.NewProvider()
 
-	examsUseCase := exams.New(patientProvider, ExamsRepository)
+	examsUseCase := exams.New(patientProvider, examsRepository)
 	fmt.Println(examResultProvider)
+
+	go script.HandleExamsResultProcessing(examResultProvider, examsRepository)
 
 	r := mux.NewRouter()
 	web.ConfigureExamsRoutes(examsUseCase, r)
