@@ -1,5 +1,5 @@
 # microservice zmed_exam_manager
-This is a golang microservice study case that manages exam's registry.
+This is a golang microservice PoC that manages exam's registry.
 It makes part of a software architecture with microservices and AWS infrastructure prepared to handle exams for the fictional "ZMED" company.
 
 ## ZMED exams's architecture diagram
@@ -25,7 +25,7 @@ It makes part of a software architecture with microservices and AWS infrastructu
   - exam_type (int): the exam code
 > An attendant allows a patient to undergo a medical examination. The patient's document and the type of exam to be performed are informed.
 The microservice makes a request to zmed_patient_manager. If the patient is not active or the exam code does not exist, it returns an error.
-The medical exam record is persisted with status "Registered" in dynamoDB and the microservice returns its body as responseDTO on success.
+The medical exam record is persisted with status "Registered" in dynamoDB and the microservice returns a responseDTO body on success.
 -----
 ### Get exams from a patient
 - path: "/exams/info"
@@ -45,7 +45,7 @@ The medical exam record is persisted with status "Registered" in dynamoDB and th
   - document (string): patient's document
   - exam_id (string): uuid id from the exam
   - exam_type (int): the exam code
-> The attendant responsible for performing the exam informs the document, the exam id registered and the type of exam to be performed. 
+> The attendant responsible for performing the exam informs the document, the exam ID and the type of exam to be performed. 
 > If the exam is not registered, it will return an error. 
 > The exam is updated in dynamoDB for "Started" status. 
 > Returns a serialized JWT token that must be inserted into the exam result paper which will be uploaded to the S3 bucket to be processed.
@@ -62,13 +62,14 @@ The medical exam record is persisted with status "Registered" in dynamoDB and th
 > This endpoint is used for cases where an exam result was not processed automatically and there is a need for an attendant to inform it manually. 
 > The request must contain the exam token and the exam result token. 
 > Both tokens are then deserialized. Returns an error in case of data inconsistency. 
-> In case of success, the exam is updated with status "Finished" in dynamoDB, then it searches for the user's contact in zmed_patient_manager and sends a text message or email informing that the exam has been finished.
+> In case of success, the exam is updated with status "Finished" in dynamoDB, then it searches for the user's contact in zmed_patient_manager and sends a text message or email informing that the exam has been completely finished.
 -----
 ## Parallel processing
-> Every time an exam is uploaded to the S3's "/completed" folder a goroutine will pull this exam and process it. 
+> A goroutine will pull exams from S3 every time an exam is uploaded to the S3's "/completed" folder. 
 > If successful, the goroutine performs the same steps as the "/exams/communicate" endpoint. 
-> In case it cannot handle the exam tokens, it will update the status in dynamoDB to "Stuck" and move the file from the "/completed"  to "/stuck" folder.
-> If there is any inconsistency with the patient, the exam is moved to the "/denied" folder. If the exam has "Revoked" status in dynamoDB, the result is moved to the "/deleted" folder.
+> In case it cannot handle the exam tokens, it will move the file from the "/completed"  to the "/stuck" folder.
+
+> [to be implemented] If there is any inconsistency with the patient, the exam is moved to the "/denied" folder. If the exam has "Revoked" status in dynamoDB, the result is moved to the "/deleted" folder.
 
 ## Uploading exam results
 > The exam results must be uploaded in the "/completed" folder. 
